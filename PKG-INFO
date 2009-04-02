@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: python-dateutil
-Version: 1.1
+Version: 1.2
 Summary: Extensions to the standard python 2.3+ datetime module
 Home-page: http://labix.org/python-dateutil
 Author: Gustavo Niemeyer

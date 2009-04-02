@@ -297,7 +297,7 @@ class tzfile(datetime.tzinfo):
 
         # Not used, for now
         if leapcnt:
-            leap = struct.unpack(">%dl" % leapcnt*2,
+            leap = struct.unpack(">%dl" % (leapcnt*2),
                                  fileobj.read(leapcnt*8))
 
         # Then there are tzh_ttisstdcnt standard/wall
@@ -329,11 +329,16 @@ class tzfile(datetime.tzinfo):
         # Build ttinfo list
         self._ttinfo_list = []
         for i in range(typecnt):
+            gmtoff, isdst, abbrind =  ttinfo[i]
+            # Round to full-minutes if that's not the case. Python's
+            # datetime doesn't accept sub-minute timezones. Check
+            # http://python.org/sf/1447945 for some information.
+            gmtoff = (gmtoff+30)//60*60
             tti = _ttinfo()
-            tti.offset = ttinfo[i][0]
-            tti.delta = datetime.timedelta(seconds=ttinfo[i][0])
-            tti.isdst = ttinfo[i][1]
-            tti.abbr = abbr[ttinfo[i][2]:abbr.find('\x00', ttinfo[i][2])]
+            tti.offset = gmtoff
+            tti.delta = datetime.timedelta(seconds=gmtoff)
+            tti.isdst = isdst
+            tti.abbr = abbr[abbrind:abbr.find('\x00', abbrind)]
             tti.isstd = (ttisstdcnt > i and isstd[i] != 0)
             tti.isgmt = (ttisgmtcnt > i and isgmt[i] != 0)
             self._ttinfo_list.append(tti)
@@ -709,9 +714,9 @@ class tzical:
         if tzid is None:
             keys = self._vtz.keys()
             if len(keys) == 0:
-                raise "no timezones defined"
+                raise ValueError, "no timezones defined"
             elif len(keys) > 1:
-                raise "more than one timezone available"
+                raise ValueError, "more than one timezone available"
             tzid = keys[0]
         return self._vtz.get(tzid)
 
