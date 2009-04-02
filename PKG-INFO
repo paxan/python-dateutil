@@ -1,10 +1,10 @@
 Metadata-Version: 1.0
 Name: python-dateutil
-Version: 1.0
+Version: 1.1
 Summary: Extensions to the standard python 2.3+ datetime module
-Home-page: https://moin.conectiva.com.br/DateUtil
+Home-page: http://labix.org/python-dateutil
 Author: Gustavo Niemeyer
-Author-email: niemeyer@conectiva.com
+Author-email: gustavo@niemeyer.net
 License: PSF License
 Description: The dateutil module provides powerful extensions to the standard
         datetime module, available in Python 2.3+.

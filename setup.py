@@ -1,20 +1,23 @@
 #!/usr/bin/python
 from distutils.sysconfig import get_python_lib
 from distutils.core import setup
+from os.path import isfile, join
 import glob
 import os
 
-if os.path.isfile("MANIFEST"):
+if isfile("MANIFEST"):
     os.unlink("MANIFEST")
 
-PYTHONLIB = get_python_lib(1)
+# Get PYTHONLIB with no prefix so --prefix installs work.
+PYTHONLIB = join(get_python_lib(standard_lib=1, prefix=''), 'site-packages')
+ZONEINFO = join("dateutil", "zoneinfo")
 
 setup(name="python-dateutil",
-      version = "1.0",
+      version = "1.1",
       description = "Extensions to the standard python 2.3+ datetime module",
       author = "Gustavo Niemeyer",
-      author_email = "niemeyer@conectiva.com",
-      url = "https://moin.conectiva.com.br/DateUtil",
+      author_email = "gustavo@niemeyer.net",
+      url = "http://labix.org/python-dateutil",
       license = "PSF License",
       long_description =
 """\
@@ -22,6 +25,6 @@ The dateutil module provides powerful extensions to the standard
 datetime module, available in Python 2.3+.
 """,
       packages = ["dateutil", "dateutil.zoneinfo"],
-      data_files = [(PYTHONLIB+"/dateutil/zoneinfo", 
-                     glob.glob("dateutil/zoneinfo/zoneinfo*.tar.*"))],
+      data_files = [(join(PYTHONLIB, ZONEINFO),
+                     glob.glob(join(ZONEINFO, "zoneinfo*.tar.*")))],
       )
