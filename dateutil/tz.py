@@ -1,5 +1,5 @@
 """
-Copyright (c) 2003-2005  Gustavo Niemeyer <gustavo@niemeyer.net>
+Copyright (c) 2003-2007  Gustavo Niemeyer <gustavo@niemeyer.net>
 
 This module offers extensions to the standard python 2.3+
 datetime module.
@@ -753,6 +753,8 @@ class tzical:
             else:
                 i += 1
 
+        tzid = None
+        comps = []
         invtz = False
         comptype = None
         for line in lines:
