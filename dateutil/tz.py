@@ -850,6 +850,9 @@ class tzical:
                         tzname = value
                     elif name == "COMMENT":
                         pass
+                    elif name.upper().startswith('X-'):
+                        # Ignore experimental properties.
+                        pass
                     else:
                         raise ValueError, "unsupported property: "+name
                 else:
@@ -859,6 +862,9 @@ class tzical:
                                   "unsupported TZID parm: "+parms[0]
                         tzid = value
                     elif name in ("TZURL", "LAST-MODIFIED", "COMMENT"):
+                        pass
+                    elif name.upper().startswith('X-'):
+                        # Ignore experimental properties.
                         pass
                     else:
                         raise ValueError, "unsupported property: "+name

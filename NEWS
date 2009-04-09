@@ -1,3 +1,14 @@
+Version 1.4.1.2
+-------------
+
+- Made zoneinfo module preload all known zoneinfo objects up front.
+  O(N) zoneinfo cache lookups were replaced by O(1) cache lookups,
+  thus significantly improving zoneinfo querying performance.
+
+- When parsing snippets of iCal files, ignore experimental
+  properties (things with names like X-Whatever).
+
+
 Version 1.4.1.1
 -------------
 

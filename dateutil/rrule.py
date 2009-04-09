@@ -1054,6 +1054,9 @@ class _rrulestr:
                         from dateutil import parser
                     dtstart = parser.parse(value, ignoretz=ignoretz,
                                            tzinfos=tzinfos)
+                elif name.upper().startswith('X-'):
+                    # Ignore experimental properties.
+                    pass
                 else:
                     raise ValueError, "unsupported property: "+name
             if (forceset or len(rrulevals) > 1 or
