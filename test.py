@@ -2821,6 +2821,16 @@ class RRuleTest(unittest.TestCase):
                           datetime(1998, 9, 2, 9, 0),
                           datetime(1999, 9, 2, 9, 0)])
 
+    def testStrExperimentalProp(self):
+        self.assertEqual(list(rrulestr(
+                            "DTSTART:19970902T090000\n"
+                            "X-MEN:Wolverine\n"
+                            "RRULE:FREQ=YEARLY;COUNT=3\n"
+                            )),
+                         [datetime(1997, 9, 2, 9, 0),
+                          datetime(1998, 9, 2, 9, 0),
+                          datetime(1999, 9, 2, 9, 0)])
+
     def testStrSpacesAndLines(self):
         self.assertEqual(list(rrulestr(
                               " DTSTART:19970902T090000 \n"
@@ -3750,9 +3760,11 @@ ABU2jBAVAAAAFkO3G5YAAAAXAAAAAQAAAAE=
     TZICAL_EST5EDT = """
 BEGIN:VTIMEZONE
 TZID:US-Eastern
+X-MUMBLE:Once upon a time ...
 LAST-MODIFIED:19870101T000000Z
 TZURL:http://zones.stds_r_us.net/tz/US-Eastern
 BEGIN:STANDARD
+X-FOO:Fu
 DTSTART:19671029T020000
 RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
 TZOFFSETFROM:-0400
