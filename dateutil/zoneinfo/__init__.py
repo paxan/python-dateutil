@@ -13,8 +13,7 @@ __license__ = "PSF License"
 
 __all__ = ["setcachesize", "gettz", "rebuild"]
 
-CACHE = []
-CACHESIZE = 10
+CACHE = {}
 
 class tzfile(tzfile):
     def __reduce__(self):
@@ -29,33 +28,32 @@ def getzoneinfofile():
             return os.path.join(os.path.dirname(__file__), entry)
     return None
 
-ZONEINFOFILE = getzoneinfofile()
+def buildcache():
+    global CACHE
+    zoneinfofile = getzoneinfofile()
+    if zoneinfofile:
+        tf = TarFile.open(zoneinfofile)
+        try:
+            for tarinfo in tf.getmembers():
+                if tarinfo.islnk() or tarinfo.isfile():
+                    zonefile = tf.extractfile(tarinfo)
+                    CACHE[tarinfo.name] = tzfile(zonefile)
+        finally:
+            tf.close()
+
+buildcache()
 
 del getzoneinfofile
+del buildcache
 
-def setcachesize(size):
-    global CACHESIZE, CACHE
-    CACHESIZE = size
-    del CACHE[size:]
+def setcachesize(_):
+    # Since the cache now eagerly initialized at
+    # import time, there's no point in controlling
+    # its size.
+    pass
 
 def gettz(name):
-    tzinfo = None
-    if ZONEINFOFILE:
-        for cachedname, tzinfo in CACHE:
-            if cachedname == name:
-                break
-        else:
-            tf = TarFile.open(ZONEINFOFILE)
-            try:
-                zonefile = tf.extractfile(name)
-            except KeyError:
-                tzinfo = None
-            else:
-                tzinfo = tzfile(zonefile)
-            tf.close()
-            CACHE.insert(0, (name, tzinfo))
-            del CACHE[CACHESIZE:]
-    return tzinfo
+    return CACHE.get(name)
 
 def rebuild(filename, tag=None, format="gz"):
     import tempfile, shutil
