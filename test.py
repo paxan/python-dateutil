@@ -131,6 +131,11 @@ class RelativeDeltaTest(unittest.TestCase):
         self.assertEqual(self.today+relativedelta(yearday=261),
                          date(2003, 9, 18))
 
+    def testYearDayBug(self):
+        # Tests a problem reported by Adam Ryan.
+        self.assertEqual(date(2010, 1, 1)+relativedelta(yearday=15),
+                         date(2010, 1, 15))
+
     def testNonLeapYearDay(self):
         self.assertEqual(date(2003, 1, 1)+relativedelta(nlyearday=260),
                          date(2003, 9, 17))
@@ -2371,6 +2376,17 @@ class RRuleTest(unittest.TestCase):
                          [datetime(1997, 9, 2, 18, 6, 6),
                           datetime(1997, 9, 2, 18, 6, 18),
                           datetime(1997, 9, 2, 18, 18, 6)])
+
+    def testSecondlyByHourAndMinuteAndSecondBug(self):
+        # This explores a bug found by Mathieu Bridon.
+        self.assertEqual(list(rrule(SECONDLY,
+                              count=3,
+                              bysecond=(0,),
+                              byminute=(1,),
+                              dtstart=parse("20100322120100"))),
+                         [datetime(2010, 3, 22, 12, 1),
+                          datetime(2010, 3, 22, 13, 1),
+                          datetime(2010, 3, 22, 14, 1)])
 
     def testUntilNotMatching(self):
         self.assertEqual(list(rrule(DAILY,

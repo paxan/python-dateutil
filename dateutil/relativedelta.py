@@ -1,5 +1,5 @@
 """
-Copyright (c) 2003-2007  Gustavo Niemeyer <gustavo@niemeyer.net>
+Copyright (c) 2003-2010  Gustavo Niemeyer <gustavo@niemeyer.net>
 
 This module offers extensions to the standard python 2.3+
 datetime module.
@@ -190,7 +190,7 @@ Here is the behavior of operations with relativedelta:
                     if yday <= ydays:
                         self.month = idx+1
                         if idx == 0:
-                            self.day = ydays
+                            self.day = yday
                         else:
                             self.day = yday-ydayidx[idx-1]
                         break
