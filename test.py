@@ -2858,12 +2858,14 @@ class RRuleTest(unittest.TestCase):
                           datetime(1999, 9, 2, 9, 0)])
 
     def testStrUnfold(self):
-        self.assertEqual(list(rrulestr(
-                              "FREQ=YEA\n RLY;COUNT=3\n", unfold=True,
-                              dtstart=parse("19970902T090000"))),
-                         [datetime(1997, 9, 2, 9, 0),
-                          datetime(1998, 9, 2, 9, 0),
-                          datetime(1999, 9, 2, 9, 0)])
+        for input in ("FREQ=YEA\n RLY;COUNT=3\n",
+                      "FREQ=YEA\n\tRLY;COUNT=3\n"):
+                self.assertEqual(list(rrulestr(
+                                        input, unfold=True,
+                                        dtstart=parse("19970902T090000"))),
+                                 [datetime(1997, 9, 2, 9, 0),
+                                  datetime(1998, 9, 2, 9, 0),
+                                  datetime(1999, 9, 2, 9, 0)])
 
     def testStrSet(self):
         self.assertEqual(list(rrulestr(
@@ -3913,6 +3915,14 @@ END:VTIMEZONE
         t2 = t1.astimezone(nyc)
         self.assertEquals(t0, t2)
         self.assertEquals(nyc.dst(t0), timedelta(hours=1))
+
+    def testICalUnfolding(self):
+        """
+        Just making sure we don't barf while unfolding.
+        """
+        for string in ("ho: hum\r\n frotz", "ho: hum\r\n\tfrotz"):
+            tz = tzical(StringIO(string))
+            self.assertEqual(dict(), tz._vtz)
 
     def testICalStart1(self):
         tz = tzical(StringIO(self.TZICAL_EST5EDT)).get()
