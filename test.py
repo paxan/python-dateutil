@@ -3759,9 +3759,9 @@ AAAOJZ6djgAAAA8nf9EPAAAAECpQ9ZAAAAARLDIpEQAAABIuE1ySAAAAEzDnJBMAAAAUM7hIlAAA
 ABU2jBAVAAAAFkO3G5YAAAAXAAAAAQAAAAE=
     """
 
-    TZICAL_EST5EDT = """
+    _template = """
 BEGIN:VTIMEZONE
-TZID:US-Eastern
+TZID{0}:US-Eastern
 X-MUMBLE:Once upon a time ...
 LAST-MODIFIED:19870101T000000Z
 TZURL:http://zones.stds_r_us.net/tz/US-Eastern
@@ -3783,6 +3783,10 @@ END:DAYLIGHT
 END:VTIMEZONE
     """
 
+    TZICAL_EST5EDT=_template.format('')
+    TZICAL_EST5EDT_X_DASH_ATTRIBUTE=_template.format(';X-WOO-HOO=frotzplotz')
+    TZICAL_EST5EDT_UTTERLY_GOOFY_ATTRIBUTE=_template.format(';SNORK=BORK')
+    
     def testStrStart1(self):
         self.assertEqual(datetime(2003,4,6,1,59,
                                   tzinfo=tzstr("EST5EDT")).tzname(), "EST")
@@ -3933,6 +3937,12 @@ END:VTIMEZONE
         tz = tzical(StringIO(self.TZICAL_EST5EDT)).get()
         self.assertEqual(datetime(2003,10,26,0,59,tzinfo=tz).tzname(), "EDT")
         self.assertEqual(datetime(2003,10,26,1,00,tzinfo=tz).tzname(), "EST")
+
+    def testIgnoresGoofyAttribute(self):
+        tz = tzical(StringIO(self.TZICAL_EST5EDT_X_DASH_ATTRIBUTE)).get()
+        self.assertEqual(datetime(2003,10,26,0,59,tzinfo=tz).tzname(), "EDT")
+
+        self.assertRaises(ValueError, tzical, StringIO(self.TZICAL_EST5EDT_UTTERLY_GOOFY_ATTRIBUTE))
 
     def testRoundNonFullMinutes(self):
         # This timezone has an offset of 5992 seconds in 1900-01-01.

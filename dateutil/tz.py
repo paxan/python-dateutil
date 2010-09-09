@@ -857,9 +857,10 @@ class tzical:
                         raise ValueError, "unsupported property: "+name
                 else:
                     if name == "TZID":
-                        if parms:
-                            raise ValueError, \
-                                  "unsupported TZID parm: "+parms[0]
+                        for p in parms:
+                            if not p.upper().startswith('X-'):
+                                raise ValueError, \
+                                    "unsupported TZID parm: "+p
                         tzid = value
                     elif name in ("TZURL", "LAST-MODIFIED", "COMMENT"):
                         pass
