@@ -29,6 +29,14 @@ class RelativeDeltaTest(unittest.TestCase):
     now = datetime(2003, 9, 17, 20, 54, 47, 282310)
     today = date(2003, 9, 17)
 
+    def test28Days(self):
+        start_date = datetime(2000, 1, 1)
+        unit = relativedelta(days=1)
+        span = 28
+
+        end_date = start_date + unit * span
+        self.assertEqual(end_date, datetime(2000, 1, 29))
+
     def testNextMonth(self):
         self.assertEqual(self.now+relativedelta(months=+1),
                          datetime(2003, 10, 17, 20, 54, 47, 282310))
