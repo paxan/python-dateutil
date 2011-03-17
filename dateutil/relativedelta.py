@@ -366,22 +366,22 @@ Here is the behavior of operations with relativedelta:
 
     def __mul__(self, other):
         f = float(other)
-        return relativedelta(years=self.years*f,
-                             months=self.months*f,
-                             days=self.days*f,
-                             hours=self.hours*f,
-                             minutes=self.minutes*f,
-                             seconds=self.seconds*f,
-                             microseconds=self.microseconds*f,
-                             leapdays=self.leapdays,
-                             year=self.year,
-                             month=self.month,
-                             day=self.day,
-                             weekday=self.weekday,
-                             hour=self.hour,
-                             minute=self.minute,
-                             second=self.second,
-                             microsecond=self.microsecond)
+        return relativedelta(years        = int(round(self.years*f)),
+                             months       = int(round(self.months*f)),
+                             days         = int(round(self.days*f)),
+                             hours        = int(round(self.hours*f)),
+                             minutes      = int(round(self.minutes*f)),
+                             seconds      = int(round(self.seconds*f)),
+                             microseconds = self.microseconds*f,
+                             leapdays     = self.leapdays,
+                             year         = self.year,
+                             month        = self.month,
+                             day          = self.day,
+                             weekday      = self.weekday,
+                             hour         = self.hour,
+                             minute       = self.minute,
+                             second       = self.second,
+                             microsecond  = self.microsecond)
 
     def __eq__(self, other):
         if not isinstance(other, relativedelta):
