@@ -5,8 +5,8 @@ import sys
 import os
 import re
 
-SERVER = "elsie.nci.nih.gov"
-DIR = "/pub"
+SERVER = "ftp.iana.org"
+DIR = "/tz"
 NAME = re.compile("tzdata(.*).tar.gz")
 
 def main():
